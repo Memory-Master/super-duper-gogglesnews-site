@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבזקי חדשות אוטומטיים</title>
+    <style>
+        /* עיצוב האתר - נראה כמו אפליקציית הודעות */
+        body { font-family: 'Arial', sans-serif; background-color: #e5ddd5; margin: 0; padding: 0; }
+        header { background-color: #075e54; color: white; padding: 15px; text-align: center; position: fixed; top: 0; width: 100%; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .container { margin-top: 80px; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        
+        .news-card { 
+            background: white; border-radius: 8px; padding: 12px; margin-bottom: 10px; 
+            width: 95%; max-width: 500px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border-right: 5px solid #25d366; animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .time { font-size: 0.75rem; color: #888; float: left; }
+        .title { font-weight: bold; font-size: 1.1rem; color: #000; display: block; margin-bottom: 5px; text-decoration: none; }
+        .desc { font-size: 0.95rem; color: #444; line-height: 1.4; }
+        .loader { margin-top: 20px; color: #075e54; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2 style="margin:0;">מבזקים חיים</h2>
+</header>
+
+<div class="container" id="feed">
+    <div class="loader">טוען חדשות אחרונות...</div>
+</div>
+
+<script>
+    // הגדרת המקור - כאן בחרתי ב-JDN כדוגמה, אפשר להחליף לכל כתובת RSS
+    const RSS_URL = 'https://www.jdn.co.il/feed/';
+    
+    // שימוש במתווך חינמי פתוח (לא דורש הרשמה) כדי להפוך RSS ל-JSON
+    const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+
+    async function updateNews() {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (data.status === 'ok') {
+                const feedElement = document.getElementById('feed');
+                feedElement.innerHTML = ''; // מנקה את ה"טוען..."
+
+                data.items.forEach(item => {
+                    // יצירת כרטיסייה לכל כתבה
+                    const card = document.createElement('div');
+                    card.className = 'news-card';
+
+                    // חילוץ זמן
+                    const date = new Date(item.pubDate);
+                    const timeStr = date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+
+                    card.innerHTML = `
+                        <span class="time">${timeStr}</span>
+                        <a href="${item.link}" target="_blank" class="title">${item.title}</a>
+                        <div class="desc">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 120)}...</div>
+                    `;
+                    feedElement.appendChild(card);
+                });
+            }
+        } catch (e) {
+            document.getElementById('feed').innerHTML = 'שגיאה בחיבור למקור החדשות.';
+        }
+    }
+
+    // הפעלה ראשונה
+    updateNews();
+    
+    // עדכון אוטומטי כל 10 דקות
+    setInterval(updateNews, 600000);
+</script>
+
+</body>
+</html>
