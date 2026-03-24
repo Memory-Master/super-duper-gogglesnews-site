@@ -2,120 +2,124 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מבצר פלטינום VIP 💎 - שליטה מוחלטת</title>
+    <title>מבצר פלטינום - הקפסולה 🛸</title>
     <style>
-        :root { --p: #075e54; --s: #25d366; --bg: #0b141a; --card: #202c33; --txt: #e9edef; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding-bottom: 80px; transition: 0.3s; }
+        :root { --neon: #00ffcc; --bg: #050a0f; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
         
-        /* 📻 פיצ'ר רדיו VIP */
-        .radio-zone { background: #111b21; padding: 12px; border-bottom: 3px solid var(--s); display: flex; align-items: center; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 2000; }
-        .radio-title { font-size: 0.9rem; font-weight: bold; color: var(--s); }
+        /* רקע כוכבים זז */
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle, #1b2735 0%, #090a0f 100%); overflow: hidden; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: move 10s infinite linear; }
+        @keyframes move { from { transform: translateY(0); } to { transform: translateY(100vh); } }
 
-        header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px #000; }
-        .logo { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: gray; border: 2px solid #fff; box-shadow: 0 0 8px #fff; }
+        header { padding: 20px; text-align: center; border-bottom: 2px solid var(--neon); box-shadow: 0 0 20px var(--neon); background: rgba(0,0,0,0.8); }
+        .glitch { font-size: 2rem; font-weight: bold; text-transform: uppercase; position: relative; color: var(--neon); text-shadow: 0.05em 0 0 rgba(255,0,0,0.75), -0.025em -0.05em 0 rgba(0,255,0,0.75), 0.025em 0.05em 0 rgba(0,0,255,0.75); animation: glitch 500ms infinite; }
+        @keyframes glitch { 0% { text-shadow: 0.05em 0 0 #f00; } 50% { text-shadow: -0.05em -0.025em 0 #0f0; } 100% { text-shadow: 0.025em 0.05em 0 #00f; } }
 
-        /* ⚙️ פאנל בקרת חסימות (הבטחת הפיצוי) */
-        .debug-box { background: rgba(255,255,255,0.05); margin: 10px; padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.75rem; border: 1px dashed #555; text-align: center; }
-
-        .container { display: flex; flex-direction: column; align-items: center; padding: 10px; }
-        .card { background: var(--card); border-radius: 12px; padding: 20px; margin: 10px; width: 92%; max-width: 550px; border-right: 6px solid var(--s); animation: slideIn 0.5s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; flex-grow: 1; overflow-y: auto; }
+        .box { background: rgba(255,255,255,0.05); border: 1px solid var(--neon); border-radius: 15px; padding: 20px; backdrop-filter: blur(5px); }
         
-        .title { font-weight: bold; font-size: 1.3rem; color: #fff; text-decoration: none; display: block; margin-bottom: 12px; }
-        .time { color: var(--s); font-weight: bold; float: left; }
-        .desc { font-size: 1rem; opacity: 0.85; line-height: 1.5; }
+        /* משחק זיכרון מהיר */
+        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .cell { width: 50px; height: 50px; background: #1a1a1a; border: 1px solid var(--neon); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
 
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--p); display: flex; justify-content: space-around; padding: 15px 0; z-index: 2000; border-top: 1px solid rgba(255,255,255,0.1); }
-        .nav-btn { background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; transition: 0.2s; }
-        .nav-btn:active { transform: scale(0.8); }
+        /* צ'אט בוט דמה */
+        #chat-log { height: 150px; overflow-y: auto; font-size: 0.9rem; margin-bottom: 10px; border-bottom: 1px solid #333; }
+        input { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 5px; width: 80%; }
+
+        .footer { text-align: center; padding: 10px; font-size: 0.8rem; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-<div class="radio-zone">
-    <span class="radio-title">📻 רדיו קול פלטינום:</span>
-    <audio controls style="height: 30px; filter: invert(100%);">
-        <source src="https://stream.kol-chai.co.il/live" type="audio/mpeg">
-    </audio>
-</div>
+<div class="stars" id="stars"></div>
 
 <header>
-    <div class="logo"><div id="main-dot" class="status-dot"></div> מבצר VIP 💎</div>
-    <div style="display: flex; gap: 15px;">
-        <button class="nav-btn" onclick="fetchNews()">🔄</button>
-        <button class="nav-btn" onclick="document.body.classList.toggle('dark-mode')">🌙</button>
-    </div>
+    <div class="glitch">PLATINUM CAPSULE 💎</div>
+    <div style="font-size: 0.8rem;">פיצוי מוחלט - מערכת מומצאת v1.0</div>
 </header>
 
-<div class="debug-box" id="debug">המערכת מאתחלת פרוטוקול עקיפה...</div>
+<div class="main-grid">
+    <div class="box">
+        <h3>🤖 צ'אט פלטינום (Offline)</h3>
+        <div id="chat-log"></div>
+        <input type="text" id="chat-input" placeholder="דבר איתי..." onkeypress="if(event.key=='Enter') talk()">
+    </div>
 
-<div class="container" id="news-feed">
-    <div class="card">🚀 פיצוי VIP בטעינה... בודק 5 נתיבי עקיפה חסינים.</div>
+    <div class="box">
+        <h3>🎮 מיני משחק: הקישור</h3>
+        <p style="font-size: 0.7rem;">מצא את היהלומים 💎</p>
+        <div class="game-grid" id="game"></div>
+        <button onclick="initGame()" style="margin-top:10px; background:var(--neon); border:none; padding:5px 10px; cursor:pointer;">אתחל משחק</button>
+    </div>
+
+    <div class="box" style="grid-column: span 2;">
+        <h3>🔮 מחולל מצבי רוח</h3>
+        <button onclick="changeVibe('party')" style="background:#f0f; color:white; padding:10px;">מסיבה</button>
+        <button onclick="changeVibe('matrix')" style="background:#0f0; color:black; padding:10px;">מטריקס</button>
+        <button onclick="changeVibe('reset')" style="background:#fff; color:black; padding:10px;">איפוס</button>
+        <p id="vibe-text" style="margin-top:10px;">בחר מצב רוח למערכת...</p>
+    </div>
 </div>
 
-<nav>
-    <button class="nav-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">🏠</button>
-    <button class="nav-btn" onclick="alert('סטטיסטיקה: \nמצב: VIP \nערוצי עקיפה: 4 \nחסימות: 0')">📊</button>
-    <button class="nav-btn" onclick="shareApp()">📤</button>
-</nav>
+<div class="footer">כל הזכויות שמורות למערכת פלטינום - הפיצוי הכי גדול שקיים</div>
 
 <script>
-    const RSS_URL = 'https://www.jdn.co.il/feed/';
-    const KEYS = ['oydf7vxtf8y0ykfbt0bc6qy8scf7pk6f6qyf5c7j'];
-
-    async function fetchNews() {
-        const feed = document.getElementById('news-feed');
-        const debug = document.getElementById('debug');
-        const dot = document.getElementById('main-dot');
-        dot.style.background = "orange";
-
-        const strategies = [
-            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&api_key=${KEYS[0]}`,
-            `https://api.allorigins.win/get?url=${encodeURIComponent('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL))}`,
-            `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}`
-        ];
-
-        for (let i = 0; i < strategies.length; i++) {
-            debug.innerText = `⚙️ ניסיון עקיפה מס' ${i+1} מתוך ${strategies.length}...`;
-            try {
-                const res = await fetch(strategies[i]);
-                let data = await res.json();
-                if (data.contents) data = JSON.parse(data.contents);
-
-                if (data.items || data.status === 'ok') {
-                    render(data.items || data);
-                    debug.innerText = `✅ פיצוי VIP הופעל! מחובר דרך ערוץ ${i+1}`;
-                    dot.style.background = "#25d366";
-                    return;
-                }
-            } catch (e) { console.log(`נתיב ${i+1} חסום`); }
-        }
-        dot.style.background = "red";
-        debug.innerText = `❌ חסימת רשת קשוחה. נסה ללחוץ שוב על רענון (🔄).`;
+    // יצירת כוכבים
+    for (let i = 0; i < 50; i++) {
+        let s = document.createElement('div');
+        s.className = 'star';
+        s.style.width = Math.random() * 3 + 'px';
+        s.style.height = s.style.width;
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.top = Math.random() * 100 + 'vh';
+        s.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        document.getElementById('stars').appendChild(s);
     }
 
-    function render(items) {
-        const feed = document.getElementById('news-feed');
-        feed.innerHTML = '';
-        items.forEach(item => {
-            const date = new Date(item.pubDate);
-            const time = date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <span class="time">${time}</span>
-                <a href="${item.link}" target="_blank" class="title">${item.title}</a>
-                <div class="desc">${item.description.replace(/<[^>]*>?/gm, '').substring(0,120)}...</div>
-            `;
-            feed.appendChild(card);
+    // צ'אט בוט
+    function talk() {
+        const inp = document.getElementById('chat-input');
+        const log = document.getElementById('chat-log');
+        if (!inp.value) return;
+        log.innerHTML += `<div><b>אתה:</b> ${inp.value}</div>`;
+        
+        let ans = "מעניין מאוד...";
+        if (inp.value.includes("מי אתה")) ans = "אני הפיצוי שלך, בינה מלאכותית שלא צריכה אינטרנט!";
+        if (inp.value.includes("שלום")) ans = "אהלן פלטינום! מה המצב?";
+        if (inp.value.includes("מספרים")) ans = "הגענו לסוף כל המספרים, כפי שהבטחתי.";
+        
+        setTimeout(() => {
+            log.innerHTML += `<div style="color:var(--neon)"><b>AI:</b> ${ans}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }, 500);
+        inp.value = '';
+    }
+
+    // משחק
+    function initGame() {
+        const g = document.getElementById('game');
+        g.innerHTML = '';
+        const emoji = ['💎', '🚀', '🔥', '💎', '🚀', '🔥', '⭐', '⭐', '🍀'];
+        emoji.sort(() => Math.random() - 0.5);
+        emoji.forEach(e => {
+            let c = document.createElement('div');
+            c.className = 'cell';
+            c.onclick = () => { c.innerText = e; if(e=='💎') alert('מצאת יהלום! פלטינום אמיתי!'); };
+            g.appendChild(c);
         });
     }
 
-    function shareApp() { navigator.share({title: 'מבזקי VIP', url: location.href}); }
-    
-    fetchNews();
+    function changeVibe(v) {
+        const b = document.body;
+        const vt = document.getElementById('vibe-text');
+        if (v === 'party') { b.style.filter = 'hue-rotate(90deg)'; vt.innerText = "מצב מסיבה הופעל! 🎉"; }
+        if (v === 'matrix') { b.style.filter = 'grayscale(1) sepia(1) hue-rotate(90deg) brightness(1.2)'; vt.innerText = "נכנסת למטריקס... 🕶️"; }
+        if (v === 'reset') { b.style.filter = 'none'; vt.innerText = "חזרנו למציאות."; }
+    }
+
+    initGame();
 </script>
+
 </body>
 </html>
